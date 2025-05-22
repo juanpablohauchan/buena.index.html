@@ -2,69 +2,214 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>mas o menos</title>
+  <title>Contador Universal Avanzado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
     body {
+      min-height: 100vh;
       margin: 0;
       padding: 0;
-      background-image: url('https://www.google.com/imgres?q=imagen%204k&imgurl=https%3A%2F%2Fi.redd.it%2Fx8v63p7wu2h61.jpg&imgrefurl=https%3A%2F%2Fwww.reddit.com%2Fr%2Fwallpaper%2Fcomments%2Flif71o%2Fwallpaper_4k_1920_1080%2F%3Ftl%3Des-es&docid=4fDbyBZW-hLXfM&tbnid=nHtF0AmMbPW90M&vet=12ahUKEwip4LK2hp-NAxUxDkQIHTe1Hc8QM3oECDkQAA..i&w=1920&h=1080&hcb=2&ved=2ahUKEwip4LK2hp-NAxUxDkQIHTe1Hc8QM3oECDkQAA'); /* Cambia esta URL a la imagen que desees */
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      background: #222;
       background-size: cover;
-      background-position: center;
-      font-family: Arial, sans-serif;
+      transition: background-image 0.5s;
     }
-
-    .content {
+    .container {
+      max-width: 500px;
+      margin: 2rem auto;
+      background: rgba(0,0,0,0.6);
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+    h1, h2 {
       text-align: center;
-      color: white;
-      padding-top: 20%;
     }
-
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      color: white;
-      background-color: #007BFF;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .counter {
-      margin-top: 20px;
-      font-size: 24px;
+    label {
+      display: block;
+      margin-top: 1.5rem;
       font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 6px 8px;
+      border-radius: 5px;
+      border: none;
+      margin: 0.3rem 0 1rem 0;
+    }
+    button {
+      background: #29b6f6;
+      border: none;
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0.2rem 0;
+    }
+    button:hover {
+      background: #0288d1;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    audio {
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .error {
+      color: #ff4444;
+      margin-top: 0.5rem;
+    }
+    .alt-list button {
+      background: #43a047;
+      margin-top: 0.2rem;
+      font-size: 0.92rem;
     }
   </style>
 </head>
 <body>
-  <div class="content">
-    <h1>Bienvenido a mi página</h1>
-    <button onclick="window.location.href='https://example.com'">Ir a otra página</button>
-    <div class="counter">
-      Visitas: <span id="visit-count">0</span>
+  <div class="container">
+    <h1>Contador Universal</h1>
+    <h2>Usuarios en Entrada</h2>
+    <ul id="user-list"></ul>
+    <form id="entry-form" autocomplete="off">
+      <input type="text" id="username" placeholder="Tu nombre..." required>
+      <button type="submit">Entrar</button>
+    </form>
+    <h1 id="counter" style="margin:2.5rem 0 1.2rem 0;">0</h1>
+
+    <label for="bg-url">URL Imagen de Fondo:</label>
+    <input type="text" id="bg-url" value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80">
+
+    <label for="music-url">URL Música de Fondo:</label>
+    <input type="text" id="music-url" value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+
+    <div id="audio-player">
+      <audio id="background-audio" controls autoplay loop></audio>
+      <div class="error" id="audio-error" style="display:none;">
+        Error al cargar la música.<br>
+        Prueba una de estas alternativas:
+        <div class="alt-list"></div>
+      </div>
     </div>
   </div>
-
   <script>
-    // Contador de visitas
-    const visitCountKey = 'visitCount';
-    let visitCount = localStorage.getItem(visitCountKey);
+    // CONFIGURA TU FIREBASE EN ESTA SECCIÓN
+    const firebaseConfig = {
+      apiKey: "PON_TU_API_KEY_AQUI",
+      authDomain: "PON_TU_AUTH_DOMAIN_AQUI",
+      databaseURL: "PON_TU_DATABASE_URL_AQUI",
+      projectId: "PON_TU_PROJECT_ID_AQUI",
+      storageBucket: "PON_TU_STORAGE_BUCKET_AQUI",
+      messagingSenderId: "PON_TU_MESSAGING_SENDER_ID_AQUI",
+      appId: "PON_TU_APP_ID_AQUI"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    if (!visitCount) {
-      visitCount = 0;
-    } else {
-      visitCount = parseInt(visitCount);
+    // Alternativas de música pública
+    const alternatives = [
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+      "https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa3c48.mp3"
+    ];
+
+    // --- Lógica del contador y usuarios ---
+    const counterRef = db.ref('counter');
+    const usersRef = db.ref('users');
+    const counterElem = document.getElementById('counter');
+    const userList = document.getElementById('user-list');
+    const entryForm = document.getElementById('entry-form');
+    const usernameInput = document.getElementById('username');
+
+    // Escuchar y actualizar contador en tiempo real
+    counterRef.on('value', snap => {
+      const val = snap.val() || 0;
+      counterElem.textContent = val;
+    });
+
+    // Escuchar lista de usuarios en tiempo real
+    usersRef.on('value', snap => {
+      const users = snap.val() || {};
+      userList.innerHTML = '';
+      Object.values(users).forEach(u => {
+        const li = document.createElement('li');
+        li.textContent = u;
+        userList.appendChild(li);
+      });
+    });
+
+    // Alguien entra: suma usuario y actualiza contador
+    entryForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = usernameInput.value.trim();
+      if (!name) return;
+      // Agrega usuario
+      usersRef.push(name);
+      // Incrementa contador (transaccional para evitar race conditions)
+      counterRef.transaction(val => (val || 0) + 1);
+      usernameInput.value = '';
+    });
+
+    // --- Fondo dinámico ---
+    const bgUrlInput = document.getElementById('bg-url');
+    function setBg(url) {
+      document.body.style.backgroundImage = `url('${url}')`;
     }
+    setBg(bgUrlInput.value);
+    bgUrlInput.addEventListener('change', e => {
+      setBg(e.target.value);
+    });
 
-    visitCount += 1;
-    localStorage.setItem(visitCountKey, visitCount);
+    // --- Música de fondo dinámica y manejo de errores ---
+    const musicUrlInput = document.getElementById('music-url');
+    const audio = document.getElementById('background-audio');
+    const audioError = document.getElementById('audio-error');
+    const altList = document.querySelector('.alt-list');
+    function setMusic(url) {
+      audioError.style.display = 'none';
+      audio.src = url;
+      audio.load();
+      audio.play().catch(() => {}); // Ignora autoplay error de navegadores.
+    }
+    setMusic(musicUrlInput.value);
 
-    document.getElementById('visit-count').textContent = visitCount;
+    // Manejar cambio de url de música
+    musicUrlInput.addEventListener('change', e => {
+      setMusic(e.target.value);
+    });
+
+    // Si ocurre error al reproducir audio
+    audio.addEventListener('error', () => {
+      audioError.style.display = '';
+      altList.innerHTML = '';
+      alternatives.forEach(alt => {
+        const btn = document.createElement('button');
+        btn.textContent = alt;
+        btn.onclick = () => {
+          musicUrlInput.value = alt;
+          setMusic(alt);
+        };
+        altList.appendChild(btn);
+      });
+    });
+
+    // EXTRA: Validación de archivos de audio (opcional)
+    // Si quieres validar la URL antes de setearla puedes usar un fetch HEAD simple,
+    // pero algunos servidores no permiten HEAD y puede fallar por CORS.
+
+    // --- ERRORES Y ALTERNATIVAS ---
+    // Errores comunes:
+    // - URL de fondo/música inválida: verifica que sea una imagen o mp3 accesible.
+    // - Música de Youtube/Spotify NO FUNCIONA directo: usa archivos .mp3 públicos (SoundHelix, Pixabay, etc).
+    // - Si el audio no se reproduce en móviles, pide al usuario que interactúe (autoplay limita en móviles).
+    // - Si usas este código en producción, protege la base de datos de Firebase (las reglas aquí son solo para pruebas).
   </script>
 </body>
 </html>
