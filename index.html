@@ -155,23 +155,30 @@
   </div>
 
   <script>
-    // Contador con CountAPI (gratis, sin registro)
-    const NAMESPACE = "contador-visitas-miweb-unique-id"; // Puedes personalizarlo
-    const KEY = "pagina-principal";
+    // Función para aumentar el contador de vistas
+        function increaseViewCount() {
+            // Obtén el contador actual desde localStorage o inicialízalo en 0
+            let viewCount = localStorage.getItem('viewCount');
+            if (!viewCount) {
+                viewCount = 0;
+            } else {
+                viewCount = parseInt(viewCount);
+            }
+            // Incrementa el contador
+            viewCount++;
+            // Guarda el nuevo valor en localStorage
+            localStorage.setItem('viewCount', viewCount);
+            // Actualiza el texto en pantalla
+            document.getElementById('counter').innerText = `Vistas: ${viewCount}`;
+        }
 
-    // Llama a la API para incrementar y obtener el contador
-    function incrementarContador() {
-      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`)
-        .then(res => res.json())
-        .then(data => {
-          const el = document.getElementById('contador');
-          el.textContent = data.value;
-          el.classList.remove('counter'); // reinicia animación
-          void el.offsetWidth;
-          el.classList.add('counter');
-        });
-    }
-    incrementarContador();
+        // Función para redirigir a otra página
+        function redirectToPage() {
+            window.location.href = "https://www.google.com"; // URL del buscador
+        }
+
+        // Llama a la función para aumentar el contador al cargar la página
+        increaseViewCount();
 
     // Reproducir música automáticamente cada vez que entra un usuario
     window.addEventListener('DOMContentLoaded', () => {
