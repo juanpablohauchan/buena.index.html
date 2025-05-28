@@ -2,83 +2,106 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Página con Fondo Animado y Contador de Vistas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Destacada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
       color: #fff;
-      background: linear-gradient(-45deg, #ff512f, #dd2476, #1fa2ff, #12d8fa, #a6ffcb);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+      font-family: 'Roboto', Arial, sans-serif;
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5em;
+      letter-spacing: 2px;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.7);
+    }
+    .clock-container {
+      background: rgba(20,20,30,0.8);
+      border-radius: 20px;
+      padding: 30px 60px;
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+      margin-bottom: 2em;
+      display: flex;
+      flex-direction: column;
       align-items: center;
     }
-    @keyframes gradientBG {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
+    .clock {
+      font-family: 'Orbitron', monospace;
+      font-size: 3.5rem;
+      letter-spacing: 4px;
+      color: #00ffe7;
+      text-shadow: 0 0 15px #00ffe7, 0 0 5px #000;
     }
-    .container {
-      background: rgba(0,0,0,0.5);
-      padding: 30px 40px;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      text-align: center;
+    .btn-music {
+      margin-top: 1em;
+      background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+      border: none;
+      border-radius: 30px;
+      color: #232526;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(255,210,0,0.3);
+      transition: background 0.3s, transform 0.2s;
     }
-    .date {
-      font-size: 1.2em;
-      margin-bottom: 15px;
-      letter-spacing: 1px;
+    .btn-music:hover {
+      background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
+      transform: scale(1.04);
     }
-    .counter {
-      font-size: 2em;
-      margin-bottom: 20px;
+    .music-player {
+      margin-top: 2.5em;
+      background: rgba(44,62,80,0.7);
+      padding: 25px 40px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
-    /* Ocultar el reproductor de audio */
-    #audioPlayer {
-      width: 0;
-      height: 0;
-      overflow: hidden;
-      position: absolute;
-      left: -9999px;
-      top: -9999px;
+    .music-player label {
+      font-size: 1.1rem;
+      margin-bottom: 0.5em;
+      display: block;
+      font-weight: bold;
+    }
+    audio {
+      width: 100%;
+      outline: none;
+      margin-top: 0.7em;
+      border-radius: 10px;
+      background: #232526;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="date" id="date"></div>
-    <div class="counter">👁️ Vistas: <span id="viewCount">0</span></div>
+  <h1>Mi Página Destacada</h1>
+  <div class="clock-container">
+    <div id="clock" class="clock"></div>
+    <button class="btn-music" onclick="window.location.href='musica.html'">Ir a la página de música</button>
   </div>
-  <div id="audioPlayer">
-  <audio src="SpotiDownloader.com - GodFather - Fuerza Regida (1).mp3" autoplay loop></audio>
-    <!-- Reemplaza la URL de arriba con la música que prefieras -->
+  <div class="music-player">
+    <label for="audio-player">Escucha tu música aquí:</label>
+    <audio id="audio-player" controls>
+      <source src="musica.mp3" type="audio/mp3">
+      Tu navegador no soporta el elemento de audio.
+    </audio>
   </div>
   <script>
-    // Formato de fecha
-    function formatDate(date) {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      return date.toLocaleDateString('es-ES', options);
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
     }
-    document.getElementById('date').textContent = "Hoy es " + formatDate(new Date());
-
-    // Contador de vistas usando localStorage
-    function updateViewCount() {
-      const key = "viewCounter";
-      let count = parseInt(localStorage.getItem(key)) || 0;
-      count += 1;
-      localStorage.setItem(key, count);
-      document.getElementById("viewCount").textContent = count;
-     }
-    updateViewCount();
-  </script>
-</body>
-</html>
-    }
+    setInterval(updateClock, 1000);
+    updateClock();
   </script>
 </body>
 </html>
