@@ -1,1 +1,90 @@
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Página Estética con Contador y Música</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts para un look moderno -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      /* Fondo degradado animado */
+      background: linear-gradient(-45deg, #ff8a00, #e52e71, #39c1fa, #6f86d6);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    .container {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 40px 30px;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.6rem;
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .contador {
+      font-size: 2rem;
+      color: #222;
+      background: #fff8;
+      border-radius: 12px;
+      padding: 10px 30px;
+      margin-bottom: 28px;
+      display: inline-block;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .boton {
+      display: inline-block;
+      padding: 15px 36px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(229,46,113,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+    .boton:hover {
+      transform: scale(1.07);
+      box-shadow: 0 4px 24px rgba(229,46,113,0.28);
+    }
+    .music-info {
+      margin-top: 22px;
+      color: #fff;
+      font-size: 1rem;
+      opacity: 0.7;
+      letter-spacing: 1px;
+      text-shadow: 0px 1px 8px #0004;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bienvenid@ a mi página estética</h1>
+    <div class="contador" id="contador">Vistas: 0</div>
+    <br>
+    <a href="https://www.canva.com/design/DAFoqwzktqE/8m9Yk9RFpyr6G8Tk3I4eOQ/view?utm_content=DAFoqwzktqE&utm_campaign=designshare&utm_medium=link&utm_source=editor" class*
+
