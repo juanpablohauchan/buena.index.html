@@ -2,24 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Página Estética con Contador y Música</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts para un look moderno -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+  <title>Página con Fondo Animado y Contador de Vistas</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', sans-serif;
       min-height: 100vh;
-      /* Fondo degradado animado */
-      background: linear-gradient(-45deg, #ff8a00, #e52e71, #39c1fa, #6f86d6);
+      font-family: Arial, sans-serif;
+      color: #fff;
+      /* Fondo animado usando gradiente */
+      background: linear-gradient(-45deg, #ff512f, #dd2476, #1fa2ff, #12d8fa, #a6ffcb);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
     @keyframes gradientBG {
       0% {background-position: 0% 50%;}
@@ -27,64 +24,85 @@
       100% {background-position: 0% 50%;}
     }
     .container {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      padding: 40px 30px;
-      border-radius: 24px;
+      background: rgba(0,0,0,0.5);
+      padding: 30px 40px;
+      border-radius: 18px;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
       text-align: center;
     }
-    h1 {
-      font-size: 2.6rem;
-      color: #fff;
-      margin-bottom: 20px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-    .contador {
-      font-size: 2rem;
-      color: #222;
-      background: #fff8;
-      border-radius: 12px;
-      padding: 10px 30px;
-      margin-bottom: 28px;
-      display: inline-block;
-      font-weight: bold;
-      letter-spacing: 2px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    }
-    .boton {
-      display: inline-block;
-      padding: 15px 36px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 30px;
-      background: linear-gradient(90deg, #ff8a00, #e52e71);
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 2px 12px rgba(229,46,113,0.15);
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      margin-top: 10px;
-    }
-    .boton:hover {
-      transform: scale(1.07);
-      box-shadow: 0 4px 24px rgba(229,46,113,0.28);
-    }
-    .music-info {
-      margin-top: 22px;
-      color: #fff;
-      font-size: 1rem;
-      opacity: 0.7;
+    .date {
+      font-size: 1.2em;
+      margin-bottom: 15px;
       letter-spacing: 1px;
-      text-shadow: 0px 1px 8px #0004;
+    }
+    .counter {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .audio-section {
+      margin-top: 20px;
+    }
+    input[type="text"] {
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+      width: 250px;
+      margin-right: 8px;
+    }
+    button {
+      padding: 5px 14px;
+      border-radius: 8px;
+      border: none;
+      background: #1fa2ff;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #12d8fa;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>pagina intento 10 </h1>
-    <div class="contador" id="contador">Vistas: 0</div>
-    <br>
-    <a href="https://www.canva.com/design/DAFoqwzktqE/8m9Yk9RFpyr6G8Tk3I4eOQ/view?utm_content=DAFoqwzktqE&utm_campaign=designshare&utm_medium=link&utm_source=editor" class*
-
+    <div class="date" id="date"></div>
+    <div class="counter">👁️ Vistas: <span id="viewCount">0</span></div>
+    <div class="audio-section">
+      <input type="text" id="musicUrl" placeholder="Pega la URL de tu música aquí">
+      <button onclick="playMusic()">Reproducir</button>
+      <div id="audioPlayer"></div>
+    </div>
+  </div>
+  <script>
+    // Formato de fecha
+    function formatDate(date) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('es-ES', options);
+    }
+    document.getElementById('date').textContent = "Hoy es " + formatDate(new Date());
+
+    // Contador de vistas usando localStorage
+    function updateViewCount() {
+      const key = "viewCounter";
+      let count = parseInt(localStorage.getItem(key)) || 0;
+      count += 1;
+      localStorage.setItem(key, count);
+      document.getElementById("viewCount").textContent = count;
+    }
+    updateViewCount();
+
+    // Reproducir música desde URL
+    function playMusic() {
+      const url = document.getElementById("musicUrl").value;
+      const audioPlayerDiv = document.getElementById("audioPlayer");
+      if (!url) {
+        audioPlayerDiv.innerHTML = "<div style='color:lightcoral;'>¡Por favor ingresa una URL válida!</div>";
+        return;
+      }
+      audioPlayerDiv.innerHTML = `<audio controls autoplay src="${url}" style="margin-top:10px;width:100%;"></audio>`;
+    }
+  </script>
+</body>
+</html>
