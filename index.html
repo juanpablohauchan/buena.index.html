@@ -1,112 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página con Fondo, Botón y Música</title>
-    <style>
-        body {
-            background-image: url('https://source.unsplash.com/random/1600x900');
-            background-size: cover;
-            text-align: center;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .button {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-        }
-        .counter {
-            font-size: 20px;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Página con Contador, Hora y Música</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #232526 0%, #1e3c72 50%, #2a5298 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: rgba(30, 32, 46, 0.90);
+      border-radius: 25px;
+      box-shadow: 0 10px 40px #000a;
+      padding: 2.5rem 2.5rem 2rem 2.5rem;
+      text-align: center;
+      max-width: 400px;
+      width: 95vw;
+      z-index: 1;
+    }
+    h1 {
+      color: #fff;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 10px #0008;
+    }
+    .counter {
+      font-size: 3rem;
+      color: #ffe56a;
+      font-weight: 900;
+      margin: 2rem 0 1.5rem 0;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 10px #1e3c72, 0 1px 0 #2a5298;
+      transition: color 0.15s;
+      user-select: none;
+      animation: pop 0.45s;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .clock {
+      position: fixed;
+      top: 18px;
+      right: 36px;
+      background: rgba(30,32,46,0.7);
+      color: #b3e5fc;
+      padding: 10px 22px;
+      border-radius: 18px;
+      font-size: 1.2rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+      z-index: 99;
+      letter-spacing: 2px;
+      font-weight: bold;
+      box-shadow: 0 2px 10px #0003;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 1.1rem; }
+      .counter { font-size: 2rem; }
+      .clock { font-size: 1rem; padding: 7px 12px; right: 8px; top: 8px;}
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Bienvenido a mi página</h1>
-        <p class="counter">Visitas: <span id="viewCount">0</span></p>
-        <button class="button" onclick="window.location.href='https://www.ejemplo.com';">Ir a otra página</button>
-        <br><br>
-        <audio controls>
-            <source src="https://www.example.com/audio.mp3" type="audio/mpeg">
-            Tu navegador no soporta la reproducción de audio.
-        </audio>
-    </div>
+  <div class="clock" id="clock"></div>
 
-    <script>
-        // Contador de vistas usando LocalStorage
-        document.addEventListener("DOMContentLoaded", function() {
-            let count = localStorage.getItem("viewCount") || 0;
-            count++;
-            localStorage.setItem("viewCount", count);
-            document.getElementById("viewCount").innerText = count;
+  <div class="container">
+    <h1>Contador de Visitas</h1>
+    <div id="contador" class="counter">∞</div>
+  </div>
+
+  <!-- Música de fondo oculta -->
+  <audio id="audio-bg" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" autoplay loop></audio>
+
+  <script>
+    // Actualizar hora en la esquina
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Contador global usando countapi.xyz
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('https://api.countapi.xyz/hit/juanpablohauchan-home-html/visitas')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('contador').innerText = data.value;
         });
-    </script>
+    });
 
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página con Fondo, Botón y Música</title>
-    <style>
-        body {
-            background-image: url('https://source.unsplash.com/random/1600x900');
-            background-size: cover;
-            text-align: center;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .button {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-        }
-        .counter {
-            font-size: 20px;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>Bienvenido a mi página</h1>
-        <p class="counter">Visitas: <span id="viewCount">0</span></p>
-        <button class="button" onclick="window.location.href='https://www.ejemplo.com';">Ir a otra página</button>
-        <br><br>
-        <audio controls>
-            <source src="https://www.example.com/audio.mp3" type="audio/mpeg">
-            Tu navegador no soporta la reproducción de audio.
-        </audio>
-    </div>
-
-    <script>
-        // Contador de vistas usando LocalStorage
-        document.addEventListener("DOMContentLoaded", function() {
-            let count = localStorage.getItem("viewCount") || 0;
-            count++;
-            localStorage.setItem("viewCount", count);
-            document.getElementById("viewCount").innerText = count;
-        });
-    </script>
-
+    // Reproducir música automáticamente (en algunos móviles requiere interacción)
+    window.addEventListener('DOMContentLoaded', function() {
+      const audio = document.getElementById('audio-bg');
+      audio.volume = 0.75;
+      audio.play().catch(() => {});
+    });
+  </script>
 </body>
 </html>
