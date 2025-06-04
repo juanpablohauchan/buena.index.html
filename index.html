@@ -6,6 +6,7 @@
   <title>Página Destacada</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* ...Tus estilos originales aquí... */
     body {
       background: linear-gradient(135deg, #232526 0%, #414345 100%);
       color: #fff;
@@ -40,9 +41,9 @@
       color: #00ffe7;
       text-shadow: 0 0 15px #00ffe7, 0 0 5px #000;
     }
-    .btn-music {
+    .btn-video {
       margin-top: 1em;
-      background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+      background: linear-gradient(90deg, #1e90ff 0%, #00ffe7 100%);
       border: none;
       border-radius: 30px;
       color: #232526;
@@ -50,13 +51,16 @@
       font-size: 1.2rem;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(255,210,0,0.3);
+      box-shadow: 0 2px 10px rgba(0,255,231,0.3);
       transition: background 0.3s, transform 0.2s;
+      text-decoration: none;
+      display: inline-block;
     }
-    .btn-music:hover {
-      background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
+    .btn-video:hover {
+      background: linear-gradient(90deg, #00ffe7 0%, #1e90ff 100%);
       transform: scale(1.04);
     }
+    /* ...Puedes mantener los estilos de la música si quieres... */
     .music-player {
       margin-top: 2.5em;
       background: rgba(44,62,80,0.7);
@@ -80,21 +84,14 @@
   </style>
 </head>
 <body>
-  <video width="320" height="240" controls>
-  <source src="Homero ocultándose en los arbustos HD _ LOS SIMPSON.mp4" type="Homero ocultándose en los arbustos HD _ LOS SIMPSON.mp4">
-  <source src="vHomero ocultándose en los arbustos HD _ LOS SIMPSON.mp4" type="Homero ocultándose en los arbustos HD _ LOS SIMPSON.mp4">
-
-</video>
-</video>
   <h1>Mi Página Destacada</h1>
   <div class="clock-container">
     <div id="clock" class="clock"></div>
-    <button class="btn-music" onclick=" https:SpotiDownloader.com - Rumores - Joan Sebastian.mp3">Ir a la página de música</button>
+    <a class="btn-video" href="https://www.youtube.com/watch?v=TuIDelVideo" target="_blank">Ver Video</a>
   </div>
   <div class="music-player">
-    <audio src="SpotiDownloader.com - Rumores - Joan Sebastian.mp3" autoplay loop>
-</audio>
-    </audio>
+    <label>Reproduciendo música:</label>
+    <audio src="SpotiDownloader.com - Rumores - Joan Sebastian.mp3" autoplay loop controls></audio>
   </div>
   <script>
     function updateClock() {
@@ -109,4 +106,3 @@
   </script>
 </body>
 </html>
-
